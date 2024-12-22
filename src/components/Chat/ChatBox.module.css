@@ -1,0 +1,30 @@
+.nameChat{
+    padding: 10px;
+    font-weight: 400;
+}
+
+.chatBox{
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    background-image: url('/public/images/הורדה.jpeg');
+    background-repeat: repeat;
+}
+.messages{
+    flex: 1;
+    padding: 10px;
+
+}
+.input{
+    display: flex;
+    padding: 10px;
+    
+}
+.inputMsg{
+    all: unset;
+    flex: 1 1;
+    padding: 10px;
+    border-radius: 30px;
+    width: 96%;
+    background-color: white;
+}

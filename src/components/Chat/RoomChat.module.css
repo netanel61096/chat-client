@@ -1,0 +1,13 @@
+.RoomChat{
+    height: 6vh;
+    padding: 10px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 4px;
+    margin: 10px;
+}
+.RoomChat:hover{
+    background-color: rgb(199 187 187 / 27%);
+}

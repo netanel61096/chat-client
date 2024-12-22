@@ -1,12 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { fetchChats } from "../../services/chatApi";
+import RoomChat from './RoomChat';
+import PrivateChat from './PrivateChat';
+import styles from './ChatList.module.css'
+
+
 
 const ChatList = ({ onSelectChat }) => {
   const [chats, setChats] = useState([]);
 
   useEffect(() => {
     const getChats = async () => {
-      const data = await fetchChats(); // קריאה ל-API כדי לקבל רשימת צ'אטים
+      const data = await fetchChats(); 
       setChats(data);
     };
 
@@ -15,21 +20,18 @@ const ChatList = ({ onSelectChat }) => {
 
   return (
     <div>
-      <h3 style={{ textAlign: "center" }}>Chats</h3>
-      {chats?.privateChats?.map((chat) => (
-        <div
-          key={chat._id}
-          style={{
-            padding: "10px",
-            borderBottom: "1px solid #ccc",
-            cursor: "pointer",
-          }}
-          onClick={() => onSelectChat(chat)}
-        >
-          <strong>{chat.name}</strong>
-        </div>
-      ))}
-    </div>
+  <h3 className={styles.ChatList}>Chats</h3>
+  {Object.entries(chats || {}).map(([chatType, chatList]) =>
+    chatList?.map((chat) => {
+      if (chatType === "rooms") {
+        return <RoomChat  onSelectChat={onSelectChat} chat={chat} />;
+      } else if (chatType === "privateChats") {
+        return <PrivateChat onSelectChat={onSelectChat} chat={chat} />;
+      }; 
+    })
+  )}
+</div>
+
   );
 };
 

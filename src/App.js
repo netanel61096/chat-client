@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import Login from "./components/Auth/Login";
 import Register from "./components/Auth/Register";
 import Home from "./pages/Home";
-
+import './App.css'
 const App = () => {
   const { isAuthenticated } = useSelector((state) => state.user); // בדיקה אם המשתמש מחובר
 

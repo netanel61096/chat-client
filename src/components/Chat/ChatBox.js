@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from "react";
 import socket from "../../services/socket";
 import { sendMessage } from "../../services/chatApi";
+import { jwtDecode } from "jwt-decode";
+import { fetchMessagesByRoomId,getPrivateMessages } from "../../services/messageApi";
+import styles from './ChatBox.module.css';
+import { IoSendOutline } from "react-icons/io5";
 
 const ChatBox = ({ chat }) => {
   const [messages, setMessages] = useState([]);
@@ -15,12 +19,39 @@ const ChatBox = ({ chat }) => {
     return () => socket.off("receive_message");
   }, []);
 
+  useEffect(() => {
+    const fetchMessages = async () => {
+      let data;
+      try {
+        if(chat.type==="privateChat"){
+        data= await getPrivateMessages(chat.myId,chat.userId); 
+
+        }
+        else data = await fetchMessagesByRoomId(chat._id); 
+        setMessages(data);
+      } catch (error) {
+        console.error("Failed to fetch messages:", error.message);
+      }
+    };
+
+    if (chat) {
+      fetchMessages(); // שליפת הודעות כאשר הצ'אט משתנה
+    }
+  }, [chat]);
+
   const handleSendMessage = async () => {
     if (!message.trim()) return;
+    const token = localStorage.getItem("token");
+    const decodedToken = jwtDecode(token);
+    const senderId = decodedToken.id; // הנח שהטוקן מכיל את השדה "id"
+ 
 
     const messageData = {
-      chatId: chat._id,
+      ...(chat.type === "privateChat"
+        ? { receiverId: chat.userId } // אם זה צ'אט פרטי
+        : { roomId: chat._id }),
       content: message,
+      senderId
     };
 
     await sendMessage(messageData); // שליחת ההודעה לשרת
@@ -29,14 +60,14 @@ const ChatBox = ({ chat }) => {
   };
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", height: "100%" }}>
-      {/* שם הצ'אט */}
-      <div style={{ padding: "10px", borderBottom: "1px solid #ccc", fontWeight: "bold" }}>
-        {chat.name}
+    <div className={styles.chatBox}>
+      <div className={styles.nameChat}>
+      {chat.type === "privateChat"
+        ? chat.userDetails.username:chat.name}
       </div>
 
       {/* ההודעות */}
-      <div style={{ flex: 1, overflowY: "scroll", padding: "10px" }}>
+      <div className={styles.messages}>
         {messages.map((msg, index) => (
           <div key={index} style={{ margin: "10px 0" }}>
             <strong>{msg.senderName}: </strong>
@@ -46,16 +77,16 @@ const ChatBox = ({ chat }) => {
       </div>
 
       {/* שדה להזנת הודעה */}
-      <div style={{ display: "flex", padding: "10px", borderTop: "1px solid #ccc" }}>
+      <div className={styles.input}>
         <input
           type="text"
           value={message}
           onChange={(e) => setMessage(e.target.value)}
           placeholder="Type your message..."
-          style={{ flex: 1, padding: "10px", marginRight: "10px" }}
+          className={styles.inputMsg}
         />
         <button onClick={handleSendMessage} style={{ padding: "10px" }}>
-          Send
+        <IoSendOutline />
         </button>
       </div>
     </div>
