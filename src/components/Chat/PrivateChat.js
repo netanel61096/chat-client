@@ -45,7 +45,7 @@ return(
     <div>{chat.userDetails.username}</div>
     <div className={styles.lastMsg}>{chat.lastMessage}</div>
     </div>
-    <div className={styles.time}>{formatTime(chat.timeSendLastMesagge)}</div>
+    <div className={styles.time}>{formatTime(chat?.timeSendLastMesagge)}</div>
   </div>
 )
 };

@@ -1,7 +1,3 @@
-.nameChat{
-    padding: 10px;
-    font-weight: 400;
-}
 
 .chatBox{
     display: flex;
@@ -10,14 +6,47 @@
     background-image: url('/public/images/הורדה.jpeg');
     background-repeat: repeat;
 }
-.messages{
+.messages {
+    display: flex;
+    flex-direction: column;
     flex: 1;
+    overflow-y: auto; /* גלילה אנכית */
     padding: 10px;
-
-}
+    border-radius: 10px; /* עיגול פינות */
+    border: 1px solid #ddd; /* גבול דק */
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* הצללה עדינה */
+  }
+  
+  /* עיצוב scrollbar מותאם אישית */
+  .messages::-webkit-scrollbar {
+    width: 10px; /* רוחב הגלילה */
+  }
+  
+  .messages::-webkit-scrollbar-track {
+    background: #f4f4f4; /* צבע הרקע של מסלול הגלילה */
+    border-radius: 10px; /* עיגול מסלול הגלילה */
+  }
+  
+  .messages::-webkit-scrollbar-thumb {
+        background: linear-gradient(45deg, #b0bec5, #90a4ae);
+    border-radius: 10px; /* עיגול קצוות */
+    border: 2px solid #f4f4f4; /* שוליים בין המסלול לגלילה */
+  }
+  
+  .messages::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(45deg, #4b6eff, #48bfff); /* צבע משתנה בעת ריחוף */
+  }
+  
+  /* גלילה חלקה */
+  .messages {
+    scroll-behavior: smooth;
+  }
+  
 .input{
     display: flex;
     padding: 10px;
+    align-items: center;
+    margin-bottom: 10px;
     
 }
 .inputMsg{
@@ -27,4 +56,68 @@
     border-radius: 30px;
     width: 96%;
     background-color: white;
-}
+} 
+
+  .nameChat {
+    text-align: center;
+    font-weight: bold;
+    padding: 10px;
+    border-bottom: 2px lightgray solid;
+    background-color: #fff;
+  }
+  
+  .sentMessage {
+    align-self: flex-start; /* בצד שמאל */
+    background-color: #dcf8c6;
+    color: black;
+    padding: 10px;
+    border-radius: 10px;
+    margin: 5px 0;
+    max-width: 80%; /* מגביל את הרוחב של ההודעה */
+    word-wrap: break-word; /* שובר מילים ארוכות */
+    border: 1px solid #ddd; /* גבול עדין */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* הצללה קלה */
+  }
+  
+  .receivedMessage {
+    align-self: flex-end; /* בצד ימין */
+    background-color: #ffffff;
+    color: black;
+    padding: 10px;
+    border-radius: 10px;
+    margin: 5px 0;
+    max-width: 80%; /* מגביל את הרוחב של ההודעה */
+    word-wrap: break-word; /* שובר מילים ארוכות */
+    border: 1px solid #ddd; /* גבול עדין */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* הצללה קלה */
+  }
+  
+  .messageContent {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .messageInfo {
+    display: flex;
+    justify-content:flex-start;
+    font-size: 0.8em;
+    margin-top: 5px;
+    color: gray;
+  }
+  
+  .messageTime {
+    color: gray;
+  }
+  
+  .messageStatus {
+    margin-left: 10px;
+    color: gray;
+  }
+  .buttonSend{
+    padding: 10px;
+    border-radius: 50%;
+    border: none;
+    margin-left: 6px;
+    background-color: white;
+  }
+  

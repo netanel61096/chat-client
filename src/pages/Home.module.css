@@ -4,7 +4,8 @@
 }
 .ChatList{
     width: 30%;
-    overflow-y: auto;
+    
+    border-right: 2px lightgray solid;
 }
 .ChatBox{
     width: 70%;

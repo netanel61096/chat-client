@@ -1,3 +1,6 @@
 .ChatList{
     text-align: center;
+    overflow: hidden;
+    
+    border-bottom: 2px lightgray solid;
 }
