@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import styles from './PrivateChat.module.css'
 
 
@@ -42,10 +42,10 @@ return(
     onClick={() => onSelectChat(chat)}
   >
     <div>
-    <div>{chat.userDetails.username}</div>
+    <div>{chat.userDetails?.username}</div>
     <div className={styles.lastMsg}>{chat.lastMessage}</div>
     </div>
-    <div className={styles.time}>{formatTime(chat?.timeSendLastMesagge)}</div>
+    <div className={styles.time}>{formatTime(chat?.timeSendLastMessage)}</div>
   </div>
 )
 };

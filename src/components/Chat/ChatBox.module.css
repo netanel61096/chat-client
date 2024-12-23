@@ -64,6 +64,11 @@
     padding: 10px;
     border-bottom: 2px lightgray solid;
     background-color: #fff;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
   }
   
   .sentMessage {
@@ -119,5 +124,55 @@
     border: none;
     margin-left: 6px;
     background-color: white;
+  }
+  .buttonSend:hover {
+    background-color: #1db954;
+    color: #fff;
+  }
+  .participantsContainer {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    background-color: #f9f9f9;
+  }
+  
+  .participants {
+    margin-bottom: 10px;
+  }
+  
+  .participants ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .participants li {
+    padding: 5px 0;
+  }
+  
+  .userSearch {
+    margin-top: 10px;
+  }
+  .actionButtons {
+    display: flex;
+    gap: 10px;
+    margin-right: 20px;
+  }
+  
+  .participantsButton,
+  .searchButton {
+    background-color: #25d366;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s;
+  }
+  
+  .participantsButton:hover,
+  .searchButton:hover {
+    background-color: #1db954;
   }
   

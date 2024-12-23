@@ -3,13 +3,18 @@ import socket from "../../services/socket";
 import { sendMessage } from "../../services/chatApi";
 import {jwtDecode} from "jwt-decode";
 import { fetchMessagesByRoomId, getPrivateMessages } from "../../services/messageApi";
-import styles from './ChatBox.module.css';
+import UserSearchForAdd from "../search/UserSearchForAdd"; // רכיב החיפוש
+import styles from "./ChatBox.module.css";
 import { IoSendOutline } from "react-icons/io5";
+
 
 const ChatBox = ({ chat }) => {
   const [messages, setMessages] = useState([]);
   const [message, setMessage] = useState("");
   const [loggedInUserId, setLoggedInUserId] = useState(null);
+  const [showParticipants, setShowParticipants] = useState(false); // מצב הצגת המשתתפים
+  const [showSearch, setShowSearch] = useState(false); // מצב הצגת חיפוש משתמשים
+  const [participants, setParticipants] = useState([]); // משתתפי החדר
 
   // שליפת מזהה המשתמש המחובר מהטוקן
   useEffect(() => {
@@ -28,6 +33,7 @@ const ChatBox = ({ chat }) => {
   }, []);
 
   useEffect(() => {
+    setParticipants(chat.participants);
     const fetchMessages = async () => {
       let data;
       try {
@@ -56,11 +62,16 @@ const ChatBox = ({ chat }) => {
         : { roomId: chat._id }),
       content: message,
       senderId: loggedInUserId,
+      createdAt:new Date()
     };
 
     await sendMessage(messageData); // שליחת ההודעה לשרת
     socket.emit("send_message", messageData); // שידור ההודעה ב-WebSocket
     setMessage("");
+  };
+
+  const handleUserAdded = (user) => {
+    setParticipants((prev) => [...prev, user._id]); // עדכון המשתתפים
   };
 
   const formatMessageTime = (timestamp) => {
@@ -70,9 +81,52 @@ const ChatBox = ({ chat }) => {
 
   return (
     <div className={styles.chatBox}>
-      <div className={styles.nameChat}>
-        {chat.type === "privateChat" ? chat.userDetails.username : chat.name}
+      <div className={styles.header}>
+        <div className={styles.nameChat}>
+          <div>{chat.type === "privateChat" ? chat.userDetails.username : chat.name}</div>
+          {chat.type !== "privateChat" && (
+            <div className={styles.actionButtons}>
+              <button
+                className={styles.participantsButton}
+                onClick={() => setShowParticipants((prev) => !prev)}
+              >
+                {showParticipants ? "Hide Participants" : "Show Participants"}
+              </button>
+              <button
+                className={styles.searchButton}
+                onClick={() => setShowSearch((prev) => !prev)}
+              >
+                {showSearch ? "Hide Search" : "Add Participants"}
+              </button>
+            </div>
+          )}
+        </div>
       </div>
+
+      {/* רשימת המשתתפים */}
+      {showParticipants && chat.type !== "privateChat" && (
+        <div className={styles.participantsContainer}>
+          <div className={styles.participants}>
+            <h4>Participants:</h4>
+            <ul>
+              {participants.map((participant, index) => (
+                <li key={index}>{participant.username}</li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      )}
+
+      {/* חיפוש משתמשים */}
+      {showSearch && chat.type !== "privateChat" && (
+        <div className={styles.userSearch}>
+          <UserSearchForAdd
+            roomId={chat._id}
+            existingParticipants={participants}
+            onUserAdded={handleUserAdded}
+          />
+        </div>
+      )}
 
       {/* ההודעות */}
       <div className={styles.messages}>
@@ -91,10 +145,10 @@ const ChatBox = ({ chat }) => {
                 {msg.senderId === loggedInUserId && (
                   <span className={styles.messageStatus}>
                     {msg.readBy?.length > 0
-                      ? "✔✔️" 
+                      ? "✔✔️"
                       : msg.deliveredAt
-                      ? "✔✔️" 
-                      : "✔️"} 
+                      ? "✔✔️"
+                      : "✔️"}
                   </span>
                 )}
                 <span className={styles.messageTime}>{formatMessageTime(msg.createdAt)}</span>
@@ -103,6 +157,7 @@ const ChatBox = ({ chat }) => {
           </div>
         ))}
       </div>
+
       <div className={styles.input}>
         <input
           type="text"

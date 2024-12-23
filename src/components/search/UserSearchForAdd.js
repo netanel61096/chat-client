@@ -1,21 +1,21 @@
 import React, { useEffect, useState } from "react";
 import { fetchUsers } from "../../services/authApi";
-import { jwtDecode } from "jwt-decode";
-import styles from './UserSearch.module.css'
+import { addUserToRoom } from "../../services/roomApi"; // פונקציה להוספת משתמש לחדר
+import {jwtDecode} from "jwt-decode";
+import styles from "./UserSearch.module.css";
 
-
-const UserSearch = ({ onUserSelect ,existingChats}) => {
+const UserSearch = ({ roomId, existingParticipants, onUserAdded }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [allUsers, setAllUsers] = useState([]);
-  const [filteredUsers, setFilteredUsers] = useState([]); 
-  const [isFocused, setIsFocused] = useState(false); 
+  const [filteredUsers, setFilteredUsers] = useState([]);
+  const [isFocused, setIsFocused] = useState(false);
   const [error, setError] = useState(null);
 
   const getLoggedInUserId = () => {
     const token = localStorage.getItem("token");
     if (!token) return null;
     try {
-      const decoded = jwtDecode(token); 
+      const decoded = jwtDecode(token);
       return decoded.id;
     } catch (error) {
       console.error("Failed to decode token:", error);
@@ -24,29 +24,29 @@ const UserSearch = ({ onUserSelect ,existingChats}) => {
   };
 
   const loggedInUserId = getLoggedInUserId();
+
   useEffect(() => {
     const loadUsers = async () => {
       try {
-        const users = await fetchUsers(); 
+        const users = await fetchUsers();
 
-
+        // סינון משתמשים שכבר נמצאים בחדר או הם המשתמש המחובר
         const filteredUsers = users.filter(
           (user) =>
             user._id !== loggedInUserId &&
-            !existingChats.some((chat) => chat.userId === user._id)
+            !existingParticipants.some((participant) => participant.id === user._id)
         );
-        
 
-        setAllUsers(filteredUsers); 
+        setAllUsers(filteredUsers);
         setFilteredUsers(filteredUsers);
-        setError(null); 
+        setError(null);
       } catch (err) {
         setError(err.message || "Failed to fetch users");
       }
     };
 
     loadUsers();
-  }, [loggedInUserId,existingChats]); 
+  }, [loggedInUserId, existingParticipants]);
 
   const handleSearch = (term) => {
     setSearchTerm(term);
@@ -58,6 +58,24 @@ const UserSearch = ({ onUserSelect ,existingChats}) => {
     setFilteredUsers(filtered);
   };
 
+  const handleUserSelect = async (user) => {
+    try {
+      // קריאה לשרת להוספת המשתמש לחדר
+      await addUserToRoom(roomId, user._id);
+
+      // עדכון הרכיב החיצוני על הוספת המשתמש
+      if (onUserAdded) {
+        onUserAdded(user);
+      }
+
+      // הסרת המשתמש מהרשימה
+      setAllUsers((prev) => prev.filter((u) => u._id !== user._id));
+      setFilteredUsers((prev) => prev.filter((u) => u._id !== user._id));
+    } catch (error) {
+      alert("Failed to add user to room: " + error.message);
+    }
+  };
+
   return (
     <div style={{ position: "relative" }}>
       <input
@@ -65,8 +83,8 @@ const UserSearch = ({ onUserSelect ,existingChats}) => {
         value={searchTerm}
         onChange={(e) => handleSearch(e.target.value)}
         placeholder="Search for users..."
-        onFocus={() => setIsFocused(true)} 
-        onBlur={() => setIsFocused(false)} 
+        onFocus={() => setIsFocused(true)}
+        onBlur={() => setIsFocused(false)}
         className={styles.input}
       />
       {error && <div style={{ color: "red" }}>{error}</div>}
@@ -91,8 +109,8 @@ const UserSearch = ({ onUserSelect ,existingChats}) => {
           {filteredUsers.map((user) => (
             <li
               key={user._id}
-              onMouseDown={(e) => e.preventDefault()} 
-              onClick={() => onUserSelect(user)}
+              onMouseDown={(e) => e.preventDefault()}
+              onClick={() => handleUserSelect(user)}
               style={{
                 padding: "10px",
                 cursor: "pointer",

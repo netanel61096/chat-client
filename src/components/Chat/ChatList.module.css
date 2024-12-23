@@ -1,6 +1,62 @@
 .ChatList{
     text-align: center;
     overflow: hidden;
-    
-    border-bottom: 2px lightgray solid;
 }
+.deleteButton {
+    background-color: #ff4d4f;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s;
+    height: 30px;
+    margin: 10px;
+    max-width: 400px;
+    min-width: 200px;
+}
+  
+  
+  .deleteButton:hover {
+    background-color: #d9363e;
+  }
+  .header{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    border-bottom: 2px lightgray solid;
+    align-items: center;
+    position: relative;
+  }
+  .welcome {
+    flex: 1;
+  }
+  .menuButton {
+    background-color: #075e54;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  .menuButton:hover {
+    background-color: #066542;
+  }
+  .menu {
+    position: absolute;
+    top: 80px;
+    right: 10px;
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    padding: 10px;
+    z-index: 1000;
+  }
+  

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { registerUser } from "../../services/authApi";
+import styles from "./Register.module.css";
 
 const Register = () => {
   const [username, setUsername] = useState("");
@@ -12,34 +13,41 @@ const Register = () => {
     try {
       const result = await registerUser(username, email, password);
       console.log("Registration successful:", result);
-      navigate('/login')
+      navigate("/login");
     } catch (error) {
       console.error("Registration failed:", error.message);
     }
   };
 
   return (
-    <div>
-      <h2>Register</h2>
-      <input
-        type="text"
-        placeholder="Username"
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
-      />
-      <input
-        type="email"
-        placeholder="Email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-      />
-      <input
-        type="password"
-        placeholder="Password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-      />
-      <button onClick={handleRegister}>Register</button>
+    <div className={styles.container}>
+      <div className={styles.form}>
+        <h2 className={styles.h2}>Register</h2>
+        <input
+          type="text"
+          placeholder="Username"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          className={styles.input}
+          
+        />
+        <input
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          className={styles.input}
+      
+        />
+        <input
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          className={styles.input}
+        />
+        <button onClick={handleRegister} className={styles.button}>Register</button>
+      </div>
     </div>
   );
 };

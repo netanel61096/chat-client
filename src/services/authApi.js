@@ -34,3 +34,15 @@ export const fetchUsers = async () => {
       throw error; 
     }
   };
+
+  export const deleteUser = async (userId) => {
+    try {
+      const response = await axios.delete(`${API_BASE_URL}/${userId}`);
+  
+      return response.data; 
+    } catch (error) {
+      console.error("Error deleting user:", error.response?.data || error.message);
+      throw error;
+    }
+  };
+  
