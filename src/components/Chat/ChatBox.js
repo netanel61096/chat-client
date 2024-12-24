@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import socket from "../../services/socket";
 import { sendMessage } from "../../services/chatApi";
 import {jwtDecode} from "jwt-decode";
 import { fetchMessagesByRoomId, getPrivateMessages } from "../../services/messageApi";
-import UserSearchForAdd from "../search/UserSearchForAdd"; // רכיב החיפוש
+import UserSearchForAdd from "../search/UserSearchForAdd"; 
 import styles from "./ChatBox.module.css";
 import { IoSendOutline } from "react-icons/io5";
 import { BsCheck2All } from "react-icons/bs";
@@ -17,50 +17,89 @@ const ChatBox = ({ chat }) => {
   const [showParticipants, setShowParticipants] = useState(false); // מצב הצגת המשתתפים
   const [showSearch, setShowSearch] = useState(false); // מצב הצגת חיפוש משתמשים
   const [participants, setParticipants] = useState([]); // משתתפי החדר
+  const messagesEndRef = useRef(null); 
 
-  // שליפת מזהה המשתמש המחובר מהטוקן
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
   useEffect(() => {
     const token = localStorage.getItem("token");
-    const decodedToken = jwtDecode(token);
-    setLoggedInUserId(decodedToken.id);
+
+    if (!token) {
+      console.error("No token found in localStorage.");
+      return;
+    }
+
+    try {
+      const decodedToken = jwtDecode(token);
+      setLoggedInUserId(decodedToken.id);
+    } catch (error) {
+      console.error("Failed to decode token:", error);
+      localStorage.removeItem("token"); 
+    }
+
   }, []);
 
-  useEffect(() => {
-    // האזנה להודעות נכנסות
-    socket.on("receive_message", (data) => {
-      setMessages((prev) => [...prev, data]);
-    });
+  const createUniqueRoomId = (userId1, userId2) => {
+    const sortedIds = [userId1, userId2].sort();
+    return `${sortedIds[0]}_${sortedIds[1]}`;
+  };
 
-    return () => socket.off("receive_message");
-  }, []);
 
   useEffect(() => {
+    if (!chat) return;
+  
+    const handleReceiveMessage = (data) => {
+      if (
+        (chat.type === "privateChat" && (data.receiverId === chat.myId ||  data.senderId === chat.userId || 
+          data.receiverId === chat.userId ||  data.senderId === chat.myId)) || 
+        (chat.type !== "privateChat" && data.roomId === chat._id) 
+      ) {
+        setMessages((prev) => [...prev, data]);
+      }
+    };
+    
+
+
+    socket.removeAllListeners()
+    socket.emit("leave_room");
+    socket.emit("join_room", chat._id || createUniqueRoomId(chat.userId , chat.myId));
+    socket.on("receive_message", handleReceiveMessage);
+  
+
     setParticipants(chat.participants);
+
     const fetchMessages = async () => {
-      let data;
       try {
+        let data;
         if (chat.type === "privateChat") {
-          data = await getPrivateMessages(chat.myId, chat.userId);
+          data = await getPrivateMessages(chat.myId, chat.userId); 
         } else {
-          data = await fetchMessagesByRoomId(chat._id);
+          data = await fetchMessagesByRoomId(chat._id); 
         }
-        setMessages(data);
+        setMessages(data); 
+        
       } catch (error) {
         console.error("Failed to fetch messages:", error.message);
       }
     };
-
-    if (chat) {
-      fetchMessages(); // שליפת הודעות כאשר הצ'אט משתנה
-    }
+  
+    fetchMessages(); 
   }, [chat]);
+
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
 
   const handleSendMessage = async () => {
     if (!message.trim()) return;
 
     const messageData = {
       ...(chat.type === "privateChat"
-        ? { receiverId: chat.userId } // אם זה צ'אט פרטי
+        ? { receiverId: chat.userId } 
         : { roomId: chat._id }),
       content: message,
       senderId: loggedInUserId,
@@ -158,6 +197,7 @@ const ChatBox = ({ chat }) => {
             </div>
           </div>
         ))}
+        <div ref={messagesEndRef}></div>
       </div>
 
       <div className={styles.input}>
@@ -167,6 +207,7 @@ const ChatBox = ({ chat }) => {
           onChange={(e) => setMessage(e.target.value)}
           placeholder="Type your message..."
           className={styles.inputMsg}
+          onKeyUp={(e)=>e.key==="Enter" && handleSendMessage()}
         />
         <button onClick={handleSendMessage} className={styles.buttonSend}>
           <IoSendOutline />

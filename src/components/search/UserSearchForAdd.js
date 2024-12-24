@@ -12,10 +12,23 @@ const UserSearch = ({ roomId, existingParticipants, onUserAdded }) => {
   const [error, setError] = useState(null);
 
   const getLoggedInUserId = () => {
-    const token = localStorage.getItem("token");
-    if (!token) return null;
+    const tokenString = localStorage.getItem("token");
+  
+    if (!tokenString) {
+      console.error("Token not found.");
+      return null;
+    }
+  
     try {
-      const decoded = jwtDecode(token);
+      const tokenData = JSON.parse(tokenString);
+
+      if (Date.now() > tokenData.expiresAt) {
+        console.error("Token has expired.");
+        localStorage.removeItem("token");
+        return null;
+      }
+  
+      const decoded = jwtDecode(tokenData.token);
       return decoded.id;
     } catch (error) {
       console.error("Failed to decode token:", error);

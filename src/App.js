@@ -12,7 +12,7 @@ const App = () => {
   const isAuthenticated = useSelector((state) => state.user.isAuthenticated);
 
   useEffect(() => {
-    const tokenData = localStorage.getItem("authToken");
+    const tokenData = localStorage.getItem("token");
     if (tokenData) {
       const { token, expiresAt } = JSON.parse(tokenData);
 
@@ -21,7 +21,7 @@ const App = () => {
 
         // אם הטוקן פג תוקף
         if (Date.now() > expiresAt) {
-          localStorage.removeItem("authToken");
+          localStorage.removeItem("token");
           dispatch(logout());
         } else {
           // שחזור פרטי המשתמש מהטוקן
@@ -35,7 +35,7 @@ const App = () => {
         }
       } catch (error) {
         console.error("Invalid token:", error.message);
-        localStorage.removeItem("authToken");
+        localStorage.removeItem("token");
         dispatch(logout());
       }
     }

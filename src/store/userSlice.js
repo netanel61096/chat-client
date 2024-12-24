@@ -16,14 +16,14 @@ const userSlice = createSlice({
       // שמירת הטוקן ב-localStorage
       const tokenData = {
         token: action.payload.token,
-        expiresAt: Date.now() + 10 * 60 * 1000, // טוקן תקף ל-10 דקות
+        expiresAt: Date.now() + 100 * 60 * 1000, // טוקן תקף ל-10 דקות
       };
-      localStorage.setItem("authToken", JSON.stringify(tokenData));
+      localStorage.setItem("token", JSON.stringify(tokenData));
     },
     logout: (state) => {
       state.user = null;
       state.isAuthenticated = false;
-      localStorage.removeItem("authToken"); // מחיקת הטוקן
+      localStorage.removeItem("token"); // מחיקת הטוקן
     },
     restoreSession: (state, action) => {
       state.user = action.payload;

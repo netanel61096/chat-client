@@ -39,6 +39,7 @@ const Login = () => {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           className={styles.input}
+          onKeyUp={(e)=>e.key==="Enter" && handleLogin()}
         />
         <button onClick={handleLogin} className={styles.button}>Login</button>
         <p className={styles.p}> 

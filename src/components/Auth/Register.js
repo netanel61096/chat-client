@@ -45,6 +45,7 @@ const Register = () => {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           className={styles.input}
+          onKeyUp={(e)=>e.key==="Enter" && handleRegister()}
         />
         <button onClick={handleRegister} className={styles.button}>Register</button>
       </div>

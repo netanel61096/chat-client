@@ -40,8 +40,8 @@ const ChatList = ({ onSelectChat, handleDeleteAccount }) => {
   };
   const handleLogout = () => {
     dispatch(logout());
-    localStorage.removeItem("authToken"); // מחיקת הטוקן מה-localStorage
-    window.location.reload(); // הפניה לדף ההתחברות
+    localStorage.removeItem("token"); 
+    window.location.reload(); 
   };
 
   return (
