@@ -11,7 +11,7 @@ import { logout } from "../../store/userSlice";
 
 const ChatList = ({ onSelectChat, handleDeleteAccount }) => {
   const [chats, setChats] = useState([]);
-  const [menuOpen, setMenuOpen] = useState(false); // ניהול מצב התפריט
+  const [menuOpen, setMenuOpen] = useState(false);
   const userId = useSelector((state) => state.user.user);
   const dispatch = useDispatch();
 
@@ -52,7 +52,6 @@ const ChatList = ({ onSelectChat, handleDeleteAccount }) => {
           <h3 className={styles.ChatList}>Chats</h3>
         </div>
 
-        {/* כפתור לפתיחת התפריט */}
         <button
           className={styles.menuButton}
           onClick={() => setMenuOpen((prev) => !prev)}
@@ -60,7 +59,6 @@ const ChatList = ({ onSelectChat, handleDeleteAccount }) => {
           <TbMenu2 size={24} />
         </button>
 
-        {/* תפריט צדדי */}
         {menuOpen && (
           <div className={styles.menu}>
             <button
@@ -97,6 +95,7 @@ const ChatList = ({ onSelectChat, handleDeleteAccount }) => {
               />
             );
           }
+          return null
         })
       )}
     </div>

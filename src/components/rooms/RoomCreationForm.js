@@ -1,14 +1,13 @@
 import React, { useState } from "react";
-import { useSelector } from "react-redux"; // לשליפת המידע מה-Redux
+import { useSelector } from "react-redux"; 
 import { createRoom } from "../../services/roomApi";
 import styles from "./RoomCreationForm.module.css";
 
 const RoomCreationForm = () => {
-  const [showForm, setShowForm] = useState(false); // ניהול מצב הצגת הטופס
+  const [showForm, setShowForm] = useState(false); 
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
 
-  // שליפת המידע על המשתמש המחובר מ-Redux
   const userId = useSelector((state) => state.user.user);
 
   const handleCreateRoom = async (e) => {
@@ -29,7 +28,7 @@ const RoomCreationForm = () => {
       alert("Room created successfully: " + response.newRoom.name);
       setName("");
       setDescription("");
-      setShowForm(false); // סגירת הטופס לאחר יצירת החדר
+      setShowForm(false); 
     } catch (error) {
       alert("Error creating room: " + error.message);
     }
@@ -66,7 +65,7 @@ const RoomCreationForm = () => {
           <button
             type="button"
             className={styles.cancelButton}
-            onClick={() => setShowForm(false)} // סגירת הטופס
+            onClick={() => setShowForm(false)}
           >
             Cancel
           </button>

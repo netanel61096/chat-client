@@ -14,7 +14,7 @@ const Login = () => {
   const handleLogin = async () => {
     try {
       const { token, user } = await loginUser(email, password);
-      dispatch(login({ token, user })); // שליחה ל-Redux
+      dispatch(login({ token, user })); 
       navigate("/");
     } catch (error) {
       console.error("Login failed:", error.message);

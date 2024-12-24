@@ -14,9 +14,9 @@ const ChatBox = ({ chat }) => {
   const [messages, setMessages] = useState([]);
   const [message, setMessage] = useState("");
   const [loggedInUserId, setLoggedInUserId] = useState(null);
-  const [showParticipants, setShowParticipants] = useState(false); // מצב הצגת המשתתפים
-  const [showSearch, setShowSearch] = useState(false); // מצב הצגת חיפוש משתמשים
-  const [participants, setParticipants] = useState([]); // משתתפי החדר
+  const [showParticipants, setShowParticipants] = useState(false); 
+  const [showSearch, setShowSearch] = useState(false); 
+  const [participants, setParticipants] = useState([]); 
   const messagesEndRef = useRef(null); 
 
 
@@ -106,13 +106,13 @@ const ChatBox = ({ chat }) => {
       createdAt:new Date()
     };
 
-    await sendMessage(messageData); // שליחת ההודעה לשרת
-    socket.emit("send_message", messageData); // שידור ההודעה ב-WebSocket
+    await sendMessage(messageData); 
+    socket.emit("send_message", messageData); 
     setMessage("");
   };
 
   const handleUserAdded = (user) => {
-    setParticipants((prev) => [...prev, user._id]); // עדכון המשתתפים
+    setParticipants((prev) => [...prev, user._id]); 
   };
 
   const formatMessageTime = (timestamp) => {
@@ -144,7 +144,6 @@ const ChatBox = ({ chat }) => {
         </div>
       </div>
 
-      {/* רשימת המשתתפים */}
       {showParticipants && chat.type !== "privateChat" && (
         <div className={styles.participantsContainer}>
           <div className={styles.participants}>
@@ -158,7 +157,6 @@ const ChatBox = ({ chat }) => {
         </div>
       )}
 
-      {/* חיפוש משתמשים */}
       {showSearch && chat.type !== "privateChat" && (
         <div className={styles.userSearch}>
           <UserSearchForAdd
@@ -169,15 +167,14 @@ const ChatBox = ({ chat }) => {
         </div>
       )}
 
-      {/* ההודעות */}
       <div className={styles.messages}>
         {messages.map((msg, index) => (
           <div
             key={index}
             className={
               msg.senderId === loggedInUserId
-                ? styles.sentMessage // הודעה שנשלחה (שמאל)
-                : styles.receivedMessage // הודעה שהתקבלה (ימין)
+                ? styles.sentMessage 
+                : styles.receivedMessage
             }
           >
             <div className={styles.messageContent}>

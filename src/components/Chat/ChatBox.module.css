@@ -3,41 +3,39 @@
     display: flex;
     flex-direction: column;
     height: 100%;
-    background-image: url('/public/images/הורדה.jpeg');
+    background-image: url('/public/images/imageWhatsapp.jpeg');
     background-repeat: repeat;
 }
 .messages {
     display: flex;
     flex-direction: column;
     flex: 1;
-    overflow-y: auto; /* גלילה אנכית */
+    overflow-y: auto;
     padding: 10px;
-    border-radius: 10px; /* עיגול פינות */
-    border: 1px solid #ddd; /* גבול דק */
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* הצללה עדינה */
+    border-radius: 10px; 
+    border: 1px solid #ddd;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); 
   }
-  
-  /* עיצוב scrollbar מותאם אישית */
+
   .messages::-webkit-scrollbar {
-    width: 10px; /* רוחב הגלילה */
+    width: 10px; 
   }
   
   .messages::-webkit-scrollbar-track {
-    background: #f4f4f4; /* צבע הרקע של מסלול הגלילה */
-    border-radius: 10px; /* עיגול מסלול הגלילה */
+    background: #f4f4f4; 
+    border-radius: 10px;
   }
   
   .messages::-webkit-scrollbar-thumb {
         background: linear-gradient(45deg, #b0bec5, #90a4ae);
-    border-radius: 10px; /* עיגול קצוות */
-    border: 2px solid #f4f4f4; /* שוליים בין המסלול לגלילה */
+    border-radius: 10px;
+    border: 2px solid #f4f4f4; 
   }
   
   .messages::-webkit-scrollbar-thumb:hover {
-    background: linear-gradient(45deg, #4b6eff, #48bfff); /* צבע משתנה בעת ריחוף */
+    background: linear-gradient(45deg, #4b6eff, #48bfff);
   }
-  
-  /* גלילה חלקה */
+
   .messages {
     scroll-behavior: smooth;
   }
@@ -72,29 +70,29 @@
   }
   
   .sentMessage {
-    align-self: flex-start; /* בצד שמאל */
+    align-self: flex-start; 
     background-color: #dcf8c6;
     color: black;
     padding: 10px;
     border-radius: 10px;
     margin: 5px 0;
-    max-width: 80%; /* מגביל את הרוחב של ההודעה */
-    word-wrap: break-word; /* שובר מילים ארוכות */
-    border: 1px solid #ddd; /* גבול עדין */
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* הצללה קלה */
+    max-width: 80%;
+    word-wrap: break-word;
+    border: 1px solid #ddd; 
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); 
   }
   
   .receivedMessage {
-    align-self: flex-end; /* בצד ימין */
+    align-self: flex-end;
     background-color: #ffffff;
     color: black;
     padding: 10px;
     border-radius: 10px;
     margin: 5px 0;
-    max-width: 80%; /* מגביל את הרוחב של ההודעה */
-    word-wrap: break-word; /* שובר מילים ארוכות */
-    border: 1px solid #ddd; /* גבול עדין */
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* הצללה קלה */
+    max-width: 80%; 
+    word-wrap: break-word; 
+    border: 1px solid #ddd; 
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); 
   }
   
   .messageContent {

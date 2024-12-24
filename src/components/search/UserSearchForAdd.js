@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { fetchUsers } from "../../services/authApi";
-import { addUserToRoom } from "../../services/roomApi"; // פונקציה להוספת משתמש לחדר
+import { addUserToRoom } from "../../services/roomApi";
 import {jwtDecode} from "jwt-decode";
 import styles from "./UserSearch.module.css";
 
@@ -43,7 +43,6 @@ const UserSearch = ({ roomId, existingParticipants, onUserAdded }) => {
       try {
         const users = await fetchUsers();
 
-        // סינון משתמשים שכבר נמצאים בחדר או הם המשתמש המחובר
         const filteredUsers = users.filter(
           (user) =>
             user._id !== loggedInUserId &&
@@ -73,15 +72,10 @@ const UserSearch = ({ roomId, existingParticipants, onUserAdded }) => {
 
   const handleUserSelect = async (user) => {
     try {
-      // קריאה לשרת להוספת המשתמש לחדר
       await addUserToRoom(roomId, user._id);
-
-      // עדכון הרכיב החיצוני על הוספת המשתמש
       if (onUserAdded) {
         onUserAdded(user);
       }
-
-      // הסרת המשתמש מהרשימה
       setAllUsers((prev) => prev.filter((u) => u._id !== user._id));
       setFilteredUsers((prev) => prev.filter((u) => u._id !== user._id));
     } catch (error) {

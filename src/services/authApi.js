@@ -5,7 +5,7 @@ const API_BASE_URL = "http://localhost:4000/api/users";
 
 export const loginUser = async (email, password) => {
   const response = await axios.post(`${API_BASE_URL}/login`, { email, password });
-  return response.data; // מחזיר את הטוקן ופרטי המשתמש
+  return response.data;
 };
   
 

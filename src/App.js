@@ -18,13 +18,10 @@ const App = () => {
 
       try {
         const decoded = jwtDecode(token);
-
-        // אם הטוקן פג תוקף
         if (Date.now() > expiresAt) {
           localStorage.removeItem("token");
           dispatch(logout());
         } else {
-          // שחזור פרטי המשתמש מהטוקן
           const user = {
             id: decoded.id,
             email: decoded.email,
@@ -43,7 +40,6 @@ const App = () => {
   return (
     <Router>
       <Routes>
-        {/* אם המשתמש מחובר */}
         {isAuthenticated ? (
           <>
             <Route path="/" element={<Home />} />
@@ -51,7 +47,6 @@ const App = () => {
           </>
         ) : (
           <>
-            {/* אם המשתמש לא מחובר */}
             <Route path="/login" element={<Login />} />
             <Route path="*" element={<Navigate to="/login" />} />
             <Route path="/register" element={<Register />} />
