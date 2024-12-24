@@ -6,6 +6,8 @@ import { fetchMessagesByRoomId, getPrivateMessages } from "../../services/messag
 import UserSearchForAdd from "../search/UserSearchForAdd"; // רכיב החיפוש
 import styles from "./ChatBox.module.css";
 import { IoSendOutline } from "react-icons/io5";
+import { BsCheck2All } from "react-icons/bs";
+import { BsCheck2 } from "react-icons/bs";
 
 
 const ChatBox = ({ chat }) => {
@@ -145,10 +147,10 @@ const ChatBox = ({ chat }) => {
                 {msg.senderId === loggedInUserId && (
                   <span className={styles.messageStatus}>
                     {msg.readBy?.length > 0
-                      ? "✔✔️"
+                      ? <BsCheck2All color="lightBlue"/>
                       : msg.deliveredAt
-                      ? "✔✔️"
-                      : "✔️"}
+                      ? <BsCheck2All />
+                      : <BsCheck2 />}
                   </span>
                 )}
                 <span className={styles.messageTime}>{formatMessageTime(msg.createdAt)}</span>
