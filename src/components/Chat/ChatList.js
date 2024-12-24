@@ -5,13 +5,15 @@ import PrivateChat from "./PrivateChat";
 import styles from "./ChatList.module.css";
 import UserSearch from "../search/UserSearch";
 import RoomCreationForm from "../rooms/RoomCreationForm";
-import { useSelector } from "react-redux";
+import { useSelector,useDispatch } from "react-redux";
 import { TbMenu2 } from "react-icons/tb";
+import { logout } from "../../store/userSlice";
 
 const ChatList = ({ onSelectChat, handleDeleteAccount }) => {
   const [chats, setChats] = useState([]);
   const [menuOpen, setMenuOpen] = useState(false); // ניהול מצב התפריט
   const userId = useSelector((state) => state.user.user);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const getChats = async () => {
@@ -35,6 +37,11 @@ const ChatList = ({ onSelectChat, handleDeleteAccount }) => {
       ...prevChats,
       privateChats: [...(prevChats.privateChats || []), newPrivateChat],
     }));
+  };
+  const handleLogout = () => {
+    dispatch(logout());
+    localStorage.removeItem("authToken"); // מחיקת הטוקן מה-localStorage
+    window.location.reload(); // הפניה לדף ההתחברות
   };
 
   return (
@@ -63,6 +70,9 @@ const ChatList = ({ onSelectChat, handleDeleteAccount }) => {
               Delete Account
             </button>
             <RoomCreationForm />
+            <button className={styles.logoutButton} onClick={handleLogout}>
+              Logout
+            </button>
           </div>
         )}
       </div>
